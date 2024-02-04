@@ -6,7 +6,7 @@
 1. Clone the repository:
 
     ```bash
-    git clone (https://github.com/e9gsrivastava/Updated_K2.git)
+    git clone https://github.com/e9gsrivastava/Updated_K2.git
     ```
 
 2. Create a virtual environment:
