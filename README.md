@@ -6,7 +6,7 @@
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/e9gsrivastava/K2_CBV.git
+    git clone (https://github.com/e9gsrivastava/Updated_K2.git)
     ```
 
 2. Create a virtual environment:
@@ -31,7 +31,7 @@
 
 4. Go to folder
 ```
-cd K2_CBV
+cd Updated_K2
 ```
 
 5. Install dependencies:
