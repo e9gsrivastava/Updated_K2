@@ -7,27 +7,35 @@
     <table class="table table-bordered">
       <thead class="thead-dark">
         <tr>
-          <th class="text-center" scope="col">Week Number</th>
+          <th class="text-center" scope="col">ID</th>
+          <th class="text-center" scope="col">Username</th>
+          <th class="text-center" scope="col">Trainee</th>
+          <th class="text-center" scope="col">WeekNumber</th>
           <th class="text-center" scope="col">Attendance %</th>
           <th class="text-center" scope="col">Assignment %</th>
           <th class="text-center" scope="col">Marks By Mentor</th>
           <th class="text-center" scope="col">Comments</th>
           <th class="text-center" scope="col">Update</th>
         </tr>
+      
       </thead>
       <tbody>
         {% for progress_report in progress_reports %}
-          <tr>
-            <td class="text-end">{{ progress_report.week_number }}</td>
-            <td class="text-end">{{ progress_report.attendance }}</td>
-            <td class="text-end">{{ progress_report.assignment }}</td>
-            <td class="text-end">{{ progress_report.marks }}</td>
-            <td >{{ progress_report.comments }}</td>
-            <td class="text-end">
-              <a href="{% url 'progress_app:update_progress_report' progress_report.pk %}" class="btn btn-outline-primary">Update</a>
-            </td>
-          </tr>
+            <tr>
+                <td class="text-end">{{ progress_report.user.id }}</td>
+                <td >{{ progress_report.user.username }}</td>
+                <td>{{ progress_report.user.first_name }}</td>
+                <td class="text-end">{{ progress_report.week_number }}</td>
+                <td class="text-end">{{ progress_report.attendance }}</td>
+                <td class="text-end">{{ progress_report.assignment }}</td>
+                <td class="text-end">{{ progress_report.marks }}</td>
+                <td>{{ progress_report.comments }}</td>
+                <td class="text-end">
+                    <a href="{% url 'progress_app:update_progress_report' progress_report.pk %}" class="btn btn-outline-primary">Update</a>
+                </td>
+            </tr>
         {% endfor %}
+
       </tbody>
     </table>
   </div>
