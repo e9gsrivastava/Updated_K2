@@ -1,5 +1,4 @@
-'''this is Django ORM model'''
-
+"""this is Django ORM model"""
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -7,7 +6,8 @@ from django.db.models import Avg
 
 
 class ProgressReport(models.Model):
-    '''this is model for Progress report of User'''
+    """this is model for Progress report of User"""
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     week_number = models.PositiveIntegerField()
     attendance = models.PositiveIntegerField()
@@ -16,7 +16,7 @@ class ProgressReport(models.Model):
     comments = models.TextField()
 
     def get_trainee_attendance(self):
-        '''to get the trainee's attendance data'''
+        """to get the trainee's attendance data"""
         all_users = User.objects.filter(is_superuser=False)
 
         attendance_data = {}
@@ -28,7 +28,7 @@ class ProgressReport(models.Model):
         return attendance_data
 
     def get_trainee_marks(self):
-        '''to get the trainee's marks data'''
+        """to get the trainee's marks data"""
         all_users = User.objects.filter(is_superuser=False)
 
         mark_data = {}
@@ -40,7 +40,7 @@ class ProgressReport(models.Model):
         return mark_data
 
     def get_trainee_assignment(self):
-        '''to get the trainee's assignment data'''
+        """to get the trainee's assignment data"""
         all_users = User.objects.filter(is_superuser=False)
 
         assignment_data = {}
@@ -52,7 +52,7 @@ class ProgressReport(models.Model):
         return assignment_data
 
     def get_trainee_overall_score(self):
-        '''to get the trainee's overall data'''
+        """to get the trainee's overall data"""
         all_users = User.objects.filter(is_superuser=False)
 
         overall_data = {}

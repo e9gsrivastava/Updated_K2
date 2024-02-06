@@ -75,37 +75,38 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
 class AttendanceReportView(LoginRequiredMixin, TemplateView):
     """this shows the attendance submission in percentage weekwise"""
 
-    template_name = "progress_app/progress_graph.html"
+    template_name = "progress_app/common_progress.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["attendance_data"] = ProgressReport().get_trainee_attendance()
+        context["data"] = ProgressReport().get_trainee_attendance()
         return context
 
 
 class MarksheetView(LoginRequiredMixin, TemplateView):
     """this shows the marks given by mentor"""
 
-    template_name = "progress_app/marksheet.html"
+    template_name = "progress_app/common_progress.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["mark_data"] = ProgressReport().get_trainee_marks()
+        context["data"] = ProgressReport().get_trainee_marks()
         return context
 
 
 class AssignmentReportView(LoginRequiredMixin, TemplateView):
     """this shows the assigment submission reprt in percentage"""
 
-    template_name = "progress_app/assignment_report.html"
+    template_name = "progress_app/common_progress.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["assignment_data"] = ProgressReport().get_trainee_assignment()
+        context["data"] = ProgressReport().get_trainee_assignment()
         return context
+
 
 
 class OverallProgressView(LoginRequiredMixin, TemplateView):
