@@ -49,8 +49,8 @@ class UpdateProgressReportView(UpdateView):
 
 
 class StudentDetailView(LoginRequiredMixin, DetailView):
-    """this shows the detiled view of a single students progress
-    which includes attendance, marksgiven by metor, assignment and comments given by mentor
+    """this shows the detailed view of a single student's progress
+    which includes attendance, marksgiven by mentor, assignment and comments given by mentor
     """
 
     model = User
@@ -81,6 +81,7 @@ class AttendanceReportView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context["data"] = ProgressReport().get_trainee_attendance()
+        context["data_type"] = "Attendance"
         return context
 
 
@@ -93,6 +94,8 @@ class MarksheetView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context["data"] = ProgressReport().get_trainee_marks()
+        context["data_type"] = "Marks By Mentor" 
+
         return context
 
 
@@ -105,6 +108,7 @@ class AssignmentReportView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context["data"] = ProgressReport().get_trainee_assignment()
+        context["data_type"] = "Assignment"
         return context
 
 
