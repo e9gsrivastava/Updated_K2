@@ -1,15 +1,20 @@
+'''this is to generate random data '''
 import random
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from progress_app.models import ProgressReport
 
+
 class Command(BaseCommand):
-    help = 'generate random data for progress reports'
+    '''this is to create a command'''
+    help = "generate random data for progress reports"
 
     def handle(self, *args, **options):
+        '''it is handler'''
         self.generate_random_data()
 
     def generate_random_data(self):
+        '''this generates random data'''
         trainee_names = ["Akbar", "Shivansh", "Kunal", "Akash", "Gaurav"]
 
         for name in trainee_names:

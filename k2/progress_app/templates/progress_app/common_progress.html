@@ -71,8 +71,8 @@
                     <td>{{ username }}</td>
                     {% for result in results %}
                         <td>
-                            <div class="green-box" style="opacity: {{ result }};">
-                                <div class="tooltip-text">{{ result }}%</div>
+                            <div class="green-box" style="opacity: {{ result}};"data-toggle="tooltip" data-placement="right" title="{{result|floatformat:2 }}">
+                                <div class="tooltip-text">{{ result|floatformat:2 }}</div>
                             </div>
                         </td>
                     {% endfor %}

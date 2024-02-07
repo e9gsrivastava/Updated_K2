@@ -22,7 +22,7 @@ class ProgressReport(models.Model):
         attendance_data = {}
         for user in all_users:
             progress_reports = ProgressReport.objects.filter(user=user)
-            percentages = [report.attendance / 100.0 for report in progress_reports]
+            percentages = [report.attendance  for report in progress_reports]
             attendance_data[user.username] = percentages
 
         return attendance_data
@@ -34,7 +34,7 @@ class ProgressReport(models.Model):
         mark_data = {}
         for user in all_users:
             progress_reports = ProgressReport.objects.filter(user=user)
-            marks = [report.marks / 100.0 for report in progress_reports]
+            marks = [report.marks  for report in progress_reports]
             mark_data[user.username] = marks
 
         return mark_data
@@ -46,8 +46,8 @@ class ProgressReport(models.Model):
         assignment_data = {}
         for user in all_users:
             progress_reports = ProgressReport.objects.filter(user=user)
-            assignments = [report.assignment / 100.0 for report in progress_reports]
-            assignment_data[user.username] = assignments
+            assignments = [report.assignment  for report in progress_reports]
+            assignment_data[user.username] = assignments 
 
         return assignment_data
 
@@ -84,8 +84,8 @@ class ProgressReport(models.Model):
             else:
                 assignment_percentage = 0
 
-            overall_data[user.username] = (
+            overall_data[user.username] = ((
                 attendance_percentage + marks_percentage + assignment_percentage
-            ) / 3
+            ) / 3)*100
 
         return overall_data

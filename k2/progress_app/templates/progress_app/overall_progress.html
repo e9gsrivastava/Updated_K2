@@ -22,6 +22,7 @@
             color: white;
             font-size: 14px;
             display: none;
+            
         }
 
         .green-box:hover .tooltip-text {
@@ -68,11 +69,12 @@
                                 {{ username }}
                             </a>
                         </td>
+                        
                         <td>
-                            <div class="green-box" style="opacity: {{ overall_average }};">
-                                <div class="tooltip-text">{{ overall_average }}%</div>
+                            <div class="green-box" style="opacity: {{ overall_average }};" data-toggle="tooltip" data-placement="right" title="{{ overall_average|floatformat:2 }}%">
+                              <div class="tooltip-text">{{ overall_average|floatformat:2 }}</div>
                             </div>
-                        </td>
+                          </td>
                     </tr>
                 {% endfor %}
             </tbody>

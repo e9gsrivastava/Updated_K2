@@ -94,7 +94,7 @@ class MarksheetView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         context["data"] = ProgressReport().get_trainee_marks()
-        context["data_type"] = "Marks By Mentor" 
+        context["data_type"] = "Marks By Mentor"
 
         return context
 
@@ -110,7 +110,6 @@ class AssignmentReportView(LoginRequiredMixin, TemplateView):
         context["data"] = ProgressReport().get_trainee_assignment()
         context["data_type"] = "Assignment"
         return context
-
 
 
 class OverallProgressView(LoginRequiredMixin, TemplateView):
