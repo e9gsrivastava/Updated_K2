@@ -2,7 +2,6 @@
 
 {% block content %}
   <div class="container mt-4">
-    
     <h1>{{ user.first_name }}'s Progress Details</h1>
     <br />
     <table class="table table-bordered">
@@ -18,30 +17,42 @@
           <th class="text-center" scope="col">Comments</th>
           <th class="text-center" scope="col">Update</th>
         </tr>
-      
       </thead>
       <tbody>
         {% for progress_report in progress_reports %}
-            <tr>
-                <td class="text-end">{{ progress_report.user.id }}</td>
-                <td >{{ progress_report.user.username }}</td>
-                <td>{{ progress_report.user.first_name }}</td>
-                <td class="text-end">{{ progress_report.week_number }}</td>
-                <td class="text-end">{{ progress_report.attendance }}</td>
-                <td class="text-end">{{ progress_report.assignment }}</td>
-                <td class="text-end">{{ progress_report.marks }}</td>
-                <td>{{ progress_report.comments }}</td>
-                <td class="text-end">
-                    <a href="{% url 'progress_app:update_progress_report' progress_report.pk %}" class="btn btn-outline-primary">Update</a>
-                </td>
-            </tr>
+          <tr>
+            <td class="text-end">{{ progress_report.user.id }}</td>
+            <td>{{ progress_report.user.username }}</td>
+            <td>{{ progress_report.user.first_name }}</td>
+            <td class="text-end">{{ progress_report.week_number }}</td>
+            <td class="text-end">{{ progress_report.attendance }}</td>
+            <td class="text-end">{{ progress_report.assignment }}</td>
+            <td class="text-end">{{ progress_report.marks }}</td>
+            <td>{{ progress_report.comments }}</td>
+            <td class="text-end">
+              <a href="{% url 'progress_app:update_progress_report' progress_report.pk %}" class="btn btn-outline-primary">Update</a>
+            </td>
+          </tr>
         {% endfor %}
-
       </tbody>
     </table>
   </div>
 
-  <div class="d-flex" style="justify-content: center;">
-    <a class="back-button" href="{% url 'progress_app:overall_progress' %}">Back to Overall Progress</a>
+  <br />
+
+  <div class="pagination d-flex justify-content-center align-items-center">
+    <span class="step-links">
+      {% if progress_reports.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ progress_reports.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">Page {{ progress_reports.number }} of {{ progress_reports.paginator.num_pages }}.</span>
+
+      {% if progress_reports.has_next %}
+        <a href="?page={{ progress_reports.next_page_number }}">next</a>
+        <a href="?page={{ progress_reports.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
   </div>
 {% endblock %}

@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView, DetailView, TemplateView
 from django.http import Http404
 from django.contrib.auth import get_user_model
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from progress_app.models import ProgressReport
@@ -50,7 +50,6 @@ class UpdateProgressReportView(UpdateView):
             kwargs={"username": self.object.user.username},
         )
 
-
 class StudentDetailView(LoginRequiredMixin, DetailView):
     """this shows the detailed view of a single student's progress
     which includes attendance, marksgiven by mentor, assignment and comments given by mentor
@@ -61,6 +60,7 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
     template_name = "progress_app/student_detail.html"
     login_url = reverse_lazy("progress_app:login")
     context_object_name = "user"
+    paginate_by = 5
 
     def get_object(self, queryset=None):
         user_model = get_user_model()
@@ -74,7 +74,17 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["progress_reports"] = ProgressReport.objects.filter(user=self.object)
+        progress_reports = ProgressReport.objects.filter(user=self.object)
+        paginator = Paginator(progress_reports, self.paginate_by)
+        page = self.request.GET.get("page")
+        try:
+            progress_reports_page = paginator.page(page)
+        except PageNotAnInteger:
+            progress_reports_page = paginator.page(1)
+        except EmptyPage:
+            progress_reports_page = paginator.page(paginator.num_pages)
+
+        context["progress_reports"] = progress_reports_page
         return context
 
 
@@ -125,10 +135,22 @@ class OverallProgressView(LoginRequiredMixin, TemplateView):
     """this shows the overall progress of the student"""
 
     template_name = "progress_app/overall_progress.html"
+    paginate_by = 2
     login_url = reverse_lazy("progress_app:login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        overall_data = ProgressReport().get_trainee_overall_score()
 
-        context["overall_data"] = ProgressReport().get_trainee_overall_score()
+        paginator = Paginator(list(overall_data.items()), self.paginate_by)
+        page = self.request.GET.get("page", 1)
+
+        try:
+            overall_data_page = paginator.page(page)
+        except PageNotAnInteger:
+            overall_data_page = paginator.page(1)
+        except EmptyPage:
+            overall_data_page = paginator.page(paginator.num_pages)
+
+        context["overall_data"] = overall_data_page
         return context
