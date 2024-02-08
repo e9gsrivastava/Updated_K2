@@ -7,7 +7,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, DetailView, TemplateView
 from django.http import Http404
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+# from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from progress_app.models import ProgressReport
 from .forms import ProgressReportForm
@@ -35,6 +37,7 @@ class UpdateProgressReportView(UpdateView):
     model = ProgressReport
     form_class = ProgressReportForm
     template_name = "progress_app/update_progress_report.html"
+    login_url = reverse_lazy("progress_app:login")
 
     def get_object(self, queryset=None):
         progress_report_id = self.kwargs.get("pk", None)
@@ -53,13 +56,16 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
     which includes attendance, marksgiven by mentor, assignment and comments given by mentor
     """
 
+    User = get_user_model()
     model = User
     template_name = "progress_app/student_detail.html"
+    login_url = reverse_lazy("progress_app:login")
     context_object_name = "user"
 
     def get_object(self, queryset=None):
+        user_model = get_user_model()
         username = self.kwargs.get("username", None)
-        users = User.objects.filter(username=username)
+        users = user_model.objects.filter(username=username)
 
         if not users.exists():
             raise Http404("User not found")
@@ -76,6 +82,7 @@ class AttendanceReportView(LoginRequiredMixin, TemplateView):
     """this shows the attendance submission in percentage weekwise"""
 
     template_name = "progress_app/common_progress.html"
+    login_url = reverse_lazy("progress_app:login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -89,6 +96,7 @@ class MarksheetView(LoginRequiredMixin, TemplateView):
     """this shows the marks given by mentor"""
 
     template_name = "progress_app/common_progress.html"
+    login_url = reverse_lazy("progress_app:login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -103,6 +111,7 @@ class AssignmentReportView(LoginRequiredMixin, TemplateView):
     """this shows the assigment submission reprt in percentage"""
 
     template_name = "progress_app/common_progress.html"
+    login_url = reverse_lazy("progress_app:login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -116,6 +125,7 @@ class OverallProgressView(LoginRequiredMixin, TemplateView):
     """this shows the overall progress of the student"""
 
     template_name = "progress_app/overall_progress.html"
+    login_url = reverse_lazy("progress_app:login")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

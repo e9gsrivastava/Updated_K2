@@ -1,3 +1,5 @@
+'''this is url for the progress_app'''
+
 from django.urls import path
 from .views import (
     CustomLoginView,
