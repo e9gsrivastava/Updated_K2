@@ -1,45 +1,52 @@
-"""this is to generate random data """
 import random
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from progress_app.models import ProgressReport
-
+from django.db import IntegrityError
 
 class Command(BaseCommand):
-    """this is to create a command"""
-
     help = "generate random data for progress reports"
 
     def handle(self, *args, **options):
-        """it is handler"""
         self.generate_random_data()
 
     def generate_random_data(self):
-        """this generates random data"""
         trainee_names = ["Akbar", "Shivansh", "Kunal", "Akash", "Gaurav"]
+        total_trainees = 10000
 
-        for name in trainee_names:
-            first_name = name
-            username = f"e9{name.lower()}"
-            trainee_user, _ = User.objects.get_or_create(
-                username=username,
-                password=f"{name.lower()}_password",
-                first_name=first_name,
-            )
+        for i in range(total_trainees):
+            name = random.choice(trainee_names)
+            first_name = f"name{i}"
+            base_username = f"e9{name.lower()}"
+            username = base_username + str(i)
 
-            for week_number in range(1, 11):
-                attendance = random.randint(80, 100)
-                assignment = random.randint(60, 100)
-                marks = random.randint(50, 100)
-                comments = f"Week {week_number} good."
+            while User.objects.filter(username=username).exists():
+                i += 1
+                username = base_username + str(i)
 
-                ProgressReport.objects.create(
-                    user=trainee_user,
-                    week_number=week_number,
-                    attendance=attendance,
-                    assignment=assignment,
-                    marks=marks,
-                    comments=comments,
+            try:
+                trainee_user, _ = User.objects.get_or_create(
+                    username=username,
+                    password=f"{name.lower()}_password",
+                    first_name=first_name,
                 )
+
+                for week_number in range(1, 11):
+                    attendance = random.randint(80, 100)
+                    assignment = random.randint(60, 100)
+                    marks = random.randint(50, 100)
+                    comments = f"Week {week_number} good."
+
+                    ProgressReport.objects.create(
+                        user=trainee_user,
+                        week_number=week_number,
+                        attendance=attendance,
+                        assignment=assignment,
+                        marks=marks,
+                        comments=comments,
+                    )
+
+            except IntegrityError as e:
+                self.stdout.write(self.style.ERROR(f"IntegrityError: {e}"))
 
         self.stdout.write(self.style.SUCCESS("Successful."))

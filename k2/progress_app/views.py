@@ -135,7 +135,7 @@ class OverallProgressView(LoginRequiredMixin, TemplateView):
     """this shows the overall progress of the student"""
 
     template_name = "progress_app/overall_progress.html"
-    paginate_by = 2
+    paginate_by = 10
     login_url = reverse_lazy("progress_app:login")
 
     def get_context_data(self, **kwargs):
