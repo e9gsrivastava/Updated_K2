@@ -61,7 +61,7 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
     template_name = "progress_app/student_detail.html"
     login_url = reverse_lazy("progress_app:login")
     context_object_name = "user"
-    paginate_by = 5
+    paginate_by = 8
 
     def get_object(self, queryset=None):
         user_model = get_user_model()

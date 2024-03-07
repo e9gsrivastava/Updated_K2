@@ -1,41 +1,27 @@
 {% extends 'progress_app/base.html' %}
 
 {% block content %}
-  <div class="container mt-4">
-    <h1>{{ user.first_name }}'s Progress Details</h1>
-    <br />
-    <table class="table table-bordered">
-      <thead class="thead-dark">
-        <tr>
-
-          <th class="text-center" scope="col">Username</th>
-          <th class="text-center" scope="col">WeekNumber</th>
-          <th class="text-center" scope="col">Attendance %</th>
-          <th class="text-center" scope="col">Assignment %</th>
-          <th class="text-center" scope="col">Marks By Mentor</th>
-          <th class="text-center" scope="col">Comments</th>
-          <th class="text-center" scope="col">Update</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for progress_report in progress_reports %}
-          <tr>
-            <td>{{ progress_report.user.username }}</td>
-            <td class="text-end">{{ progress_report.week_number }}</td>
-            <td class="text-end">{{ progress_report.attendance }}</td>
-            <td class="text-end">{{ progress_report.assignment }}</td>
-            <td class="text-end">{{ progress_report.marks }}</td>
-            <td>{{ progress_report.comments }}</td>
-            <td class="text-end">
-              <a href="{% url 'progress_app:update_progress_report' progress_report.pk %}" class="btn btn-outline-primary">Update</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="dashboard-header p-3">
+    <h3>{{ user.first_name }}'s Progress Report</h3>
   </div>
 
-  <br />
+  <div class="row my-5">
+    {% for progress_report in progress_reports %}
+      <div class="col-lg-3 col-md-4 col-12 d-flex justify-content-center">
+        <div class="card mb-5" style="width: 18rem;">
+          <div class="card-header d-flex justify-content-between"><b>Week: {{ progress_report.week_number }}</b>
+            <a href="{% url 'progress_app:update_progress_report' progress_report.pk %}" class="btn btn-outline-primary btn-sm">Update</a>
+          </div>
+          <div class="card-body">
+            <li>Assignment: {{ progress_report.assignment }}%</li>
+            <li>Attendance: {{ progress_report.attendance }}%</li>
+            <li>Marks: {{ progress_report.marks }}</li>
+            <li>Comments: {{ progress_report.comments }}</li>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 
   <div class="pagination d-flex justify-content-center align-items-center">
     <span class="step-links">
