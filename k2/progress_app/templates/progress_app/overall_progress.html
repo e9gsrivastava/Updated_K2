@@ -45,12 +45,12 @@
 </head>
 
 <body>
-
-
     
-   {% extends "progress_app/base.html" %}
+    {% extends 'progress_app/base.html' %}
+    {% load static %}
+    {% load custom_filters %}
+    {% block content %}
 
-   {% block content %}
     <div class="container mt-4">
         <h1>Overall Progress</h1>
         <table class="table table-bordered">
@@ -60,41 +60,42 @@
                     <th scope="col">Overall</th>
                 </tr>
             </thead>
-          <tbody>
             <tbody>
-                {% for username, overall_average in overall_data.object_list %}
+                <tbody>
+                    {% for username,overall_average in overall_data.items %}
                     <tr>
                         <td>
-                            <a href="{% url 'progress_app:student_detail' username=username %}">
-                                {{ username }}
-                            </a>
-                        </td>
-                        
-                        <td>
-                            <div class="green-box" style="opacity: {{ overall_average }};" data-toggle="tooltip" data-placement="right" title="{{ overall_average|floatformat:2 }}">
-                              <div class="tooltip-text">{{ overall_average|floatformat:2 }}</div>
-                            </div>
-                          </td>
+                        <a href="{% url 'progress_app:student_detail' username=username %}">
+                            {{ username }}
+                        </a>
+                    </td>
+                    
+                    <td>
+                         <div class="green-box" style="opacity: {{overall_average }};" data-toggle="tooltip" data-placement="right" title="{{overall_average |multiply_and_format_percentage}}%">
+                            <div class="tooltip-text">{{overall_average |multiply_and_format_percentage }}</div>
+                        </div>
+                    </td>                 
                     </tr>
                 {% endfor %}
+
             </tbody>
         </table>
     </div>
     <br>
     <div class="pagination d-flex justify-content-center align-items-center">
-        <span class="step-links">
-            {% if overall_data.has_previous %}
+        <span class="step-links">   
+            {% if page_obj.has_previous %}
                 <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ overall_data.previous_page_number }}">previous</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
             {% endif %}
     
             <span class="current">
-                Page {{ overall_data.number }} of {{ overall_data.paginator.num_pages }}.
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
             </span>
     
-            {% if overall_data.has_next %}
-                <a href="?page={{ overall_data.next_page_number }}">next</a>
-                <a href="?page={{ overall_data.paginator.num_pages }}">last &raquo;</a>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.num_pages }}">last &raquo;</a>
             {% endif %}
         </span>
     </div>

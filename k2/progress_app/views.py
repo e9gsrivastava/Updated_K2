@@ -9,10 +9,11 @@ from django.views.generic import UpdateView, DetailView, TemplateView
 from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from progress_app.models import ProgressReport
 from .forms import ProgressReportForm
+from django.views.generic import ListView
 
 
 class CustomLoginView(LoginView):
@@ -88,69 +89,89 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class AttendanceReportView(LoginRequiredMixin, TemplateView):
-    """this shows the attendance submission in percentage weekwise"""
 
+    
+class AttendanceReportView(LoginRequiredMixin, ListView):
+    """This shows the assignment submission report in percentage"""
+
+    model = ProgressReport
     template_name = "progress_app/common_progress.html"
     login_url = reverse_lazy("progress_app:login")
+    paginate_by = 100
+
+    def get_queryset(self):
+        all_users = User.objects.filter(is_superuser=False)
+        return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["data"] = ProgressReport().get_trainee_attendance()
         context["data_type"] = "Attendance"
+        temp = ProgressReport().get_trainee_attendance(context["object_list"])
+        context["overall_data"] = temp
         return context
+    
 
 
-class MarksheetView(LoginRequiredMixin, TemplateView):
-    """this shows the marks given by mentor"""
+    
+class MarksheetView(LoginRequiredMixin, ListView):
+    """This shows the assignment submission report in percentage"""
 
+    model = ProgressReport
     template_name = "progress_app/common_progress.html"
     login_url = reverse_lazy("progress_app:login")
+    paginate_by = 100
+
+    def get_queryset(self):
+        all_users = User.objects.filter(is_superuser=False)
+        return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["data"] = ProgressReport().get_trainee_marks()
-        context["data_type"] = "Marks By Mentor"
-
+        context["data_type"] = "Marks"
+        temp = ProgressReport().get_trainee_marks(context["object_list"])
+        context["overall_data"] = temp
         return context
 
 
-class AssignmentReportView(LoginRequiredMixin, TemplateView):
-    """this shows the assigment submission reprt in percentage"""
 
+class AssignmentReportView(LoginRequiredMixin, ListView):
+    """This shows the assignment submission report in percentage"""
+
+    model = ProgressReport
     template_name = "progress_app/common_progress.html"
     login_url = reverse_lazy("progress_app:login")
+    paginate_by = 100
+
+    def get_queryset(self):
+        all_users = User.objects.filter(is_superuser=False)
+        return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["data"] = ProgressReport().get_trainee_assignment()
         context["data_type"] = "Assignment"
+        temp = ProgressReport().get_trainee_assignment(context["object_list"])
+        context["overall_data"] = temp
         return context
 
 
-class OverallProgressView(LoginRequiredMixin, TemplateView):
-    """this shows the overall progress of the student"""
+
+class OverallProgressView(LoginRequiredMixin, ListView):
+    """This shows the overall progress of the student"""
 
     template_name = "progress_app/overall_progress.html"
-    paginate_by = 10
+    paginate_by = 100
     login_url = reverse_lazy("progress_app:login")
+    model = ProgressReport  
+
+    def get_queryset(self):
+
+        all_users = User.objects.filter(is_superuser=False)
+        return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        overall_data = ProgressReport().get_trainee_overall_score()
-
-        paginator = Paginator(list(overall_data.items()), self.paginate_by)
-        page = self.request.GET.get("page", 1)
-
-        try:
-            overall_data_page = paginator.page(page)
-        except PageNotAnInteger:
-            overall_data_page = paginator.page(1)
-        except EmptyPage:
-            overall_data_page = paginator.page(paginator.num_pages)
-
-        context["overall_data"] = overall_data_page
+        temp = ProgressReport().get_trainee_overall_score(context["object_list"])
+        context["overall_data"] = temp
         return context
+
+

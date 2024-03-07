@@ -15,46 +15,96 @@ class ProgressReport(models.Model):
     marks = models.PositiveIntegerField()
     comments = models.TextField()
 
-    def get_trainee_attendance(self):
-        """to get the trainee's attendance data"""
-        all_users = User.objects.filter(is_superuser=False)
+    # def get_trainee_attendance(self):
+    #     """to get the trainee's attendance data"""
+    #     all_users = User.objects.filter(is_superuser=False)
+
+    #     attendance_data = {}
+    #     for user in all_users:
+    #         progress_reports = ProgressReport.objects.filter(user=user)
+    #         percentages = [report.attendance / 100.0 for report in progress_reports]
+    #         attendance_data[user.username] = percentages
+
+    #     return attendance_data
+    
+
+
+
+    
+    def get_trainee_attendance(self, progress_reports):
+        """To get the trainee's assignment data"""
+        all_users = [report.user for report in progress_reports if not report.user.is_superuser]
 
         attendance_data = {}
         for user in all_users:
-            progress_reports = ProgressReport.objects.filter(user=user)
+            progress_reports     = ProgressReport.objects.filter(user=user)
             percentages = [report.attendance / 100.0 for report in progress_reports]
             attendance_data[user.username] = percentages
 
         return attendance_data
 
-    def get_trainee_marks(self):
-        """to get the trainee's marks data"""
-        all_users = User.objects.filter(is_superuser=False)
+
+
+    # def get_trainee_marks(self):
+    #     """to get the trainee's marks data"""
+    #     all_users = User.objects.filter(is_superuser=False)
+
+    #     mark_data = {}
+    #     for user in all_users:
+    #         progress_reports = ProgressReport.objects.filter(user=user)
+    #         marks = [report.marks / 100.0 for report in progress_reports]
+    #         mark_data[user.username] = marks
+
+    #     return mark_data
+    
+
+
+
+    def get_trainee_marks(self, progress_reports):
+        """To get the trainee's assignment data"""
+        all_users = [report.user for report in progress_reports if not report.user.is_superuser]
 
         mark_data = {}
         for user in all_users:
-            progress_reports = ProgressReport.objects.filter(user=user)
-            marks = [report.marks / 100.0 for report in progress_reports]
+            user_reports = ProgressReport.objects.filter(user=user)
+            marks = [report.marks / 100.0 for report in user_reports]
             mark_data[user.username] = marks
 
         return mark_data
 
-    def get_trainee_assignment(self):
-        """to get the trainee's assignment data"""
-        all_users = User.objects.filter(is_superuser=False)
+    # def get_trainee_assignment(self,progress_reports):
+    #     """to get the trainee's assignment data"""
+    #     # all_users = User.objects.filter(is_superuser=False)
+    #     all_users = [report.user for report in progress_reports if not report.user.is_superuser]
+
+    #     assignment_data = {}
+    #     for user in all_users:
+    #         # progress_reports = ProgressReport.objects.filter(user=user)
+    #         assignments = [report.assignment / 100.0 for report in progress_reports]
+    #         assignment_data[user.username] = assignments
+
+    #     return assignment_data
+
+
+
+    def get_trainee_assignment(self, progress_reports):
+        """To get the trainee's assignment data"""
+        all_users = [report.user for report in progress_reports if not report.user.is_superuser]
 
         assignment_data = {}
         for user in all_users:
-            progress_reports = ProgressReport.objects.filter(user=user)
-            assignments = [report.assignment / 100.0 for report in progress_reports]
+            user_reports = ProgressReport.objects.filter(user=user)
+            assignments = [report.assignment / 100.0 for report in user_reports]
             assignment_data[user.username] = assignments
 
         return assignment_data
 
-    def get_trainee_overall_score(self):
-        """to get the trainee's overall data"""
-        all_users = User.objects.filter(is_superuser=False)
 
+    @classmethod
+    def get_trainee_overall_score(cls, progress_reports):
+        """to get the trainee's overall data"""
+        # all_users = User.objects.filter(is_superuser=False)
+        all_users = [report.user for report in progress_reports if not report.user.is_superuser]
         overall_data = {}
         for user in all_users:
             progress_reports = ProgressReport.objects.filter(user=user)
