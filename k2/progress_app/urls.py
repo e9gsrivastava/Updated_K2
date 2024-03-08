@@ -1,6 +1,8 @@
-'''this is url for the progress_app'''
+"""this is url for the progress_app"""
 
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import (
     CustomLoginView,
     CustomLogoutView,
@@ -34,3 +36,6 @@ urlpatterns = [
         name="student_detail",
     ),
 ]
+
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)

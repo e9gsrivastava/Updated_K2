@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -49,11 +48,10 @@
 
     {% load static %}
     {% load custom_filters %}
-    
+
     {% block content %}
-    
-    <div class="container mt-4">
-        <h1>{{data_type}}</h1>
+      <div class="container mt-4">
+        <h1>{{ data_type }}</h1>
 
         <div class="row my-5">
           {% for username, results in overall_data.items %}
@@ -63,15 +61,12 @@
                   <h5 class="card-title">{{ username }}</h5>
                   <div class="row">
                     {% for result in results %}
-                    <div class="col-3 d-flex justify-content-center align-items-center p-2">
-                      <div class="green-box" style="opacity: {{ result|floatformat:2 }};" data-toggle="tooltip" data-placement="right" title="week:{{ forloop.counter }},{{ result|multiply_and_format_percentage }}%">
-                        <div class="tooltip-text">{{ result|multiply_and_format_percentage}}</div>
+                      <div class="col-3 d-flex justify-content-center align-items-center p-2">
+                        <div class="green-box" style="opacity: {{ result|floatformat:2 }};" data-toggle="tooltip" data-placement="right" title="week:{{ forloop.counter }},{{ result|multiply_and_format_percentage }}%">
+                          <div class="tooltip-text">{{ result|multiply_and_format_percentage }}</div>
+                        </div>
                       </div>
-                    </div>
-                  {% endfor %}
-                  
-
-        
+                    {% endfor %}
                   </div>
                 </div>
               </div>

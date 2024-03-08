@@ -9,7 +9,8 @@
     {% for progress_report in progress_reports %}
       <div class="col-lg-3 col-md-4 col-12 d-flex justify-content-center">
         <div class="card mb-5" style="width: 18rem;">
-          <div class="card-header d-flex justify-content-between"><b>Week: {{ progress_report.week_number }}</b>
+          <div class="card-header d-flex justify-content-between">
+            <b>Week: {{ progress_report.week_number }}</b>
             <a href="{% url 'progress_app:update_progress_report' progress_report.pk %}" class="btn btn-outline-primary btn-sm">Update</a>
           </div>
           <div class="card-body">

@@ -5,15 +5,14 @@ from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, DetailView, TemplateView
+from django.views.generic import UpdateView, DetailView,ListView
 from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from progress_app.models import ProgressReport
 from .forms import ProgressReportForm
-from django.views.generic import ListView
 
 
 class CustomLoginView(LoginView):
@@ -25,12 +24,10 @@ class CustomLoginView(LoginView):
         login(self.request, user)
         return redirect(reverse_lazy("progress_app:overall_progress"))
 
-
 class CustomLogoutView(LogoutView):
     """this is to logout"""
 
     next_page = reverse_lazy("progress_app:login")
-
 
 class UpdateProgressReportView(UpdateView):
     """this is to update the Students marks and comments"""
@@ -88,9 +85,6 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
         context["progress_reports"] = progress_reports_page
         return context
 
-
-
-    
 class AttendanceReportView(LoginRequiredMixin, ListView):
     """This shows the assignment submission report in percentage"""
 
@@ -100,7 +94,7 @@ class AttendanceReportView(LoginRequiredMixin, ListView):
     paginate_by = 100
 
     def get_queryset(self):
-        all_users = User.objects.filter(is_superuser=False)
+        all_users = get_user_model().objects.filter(is_superuser=False)
         return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
@@ -109,10 +103,8 @@ class AttendanceReportView(LoginRequiredMixin, ListView):
         temp = ProgressReport().get_trainee_attendance(context["object_list"])
         context["overall_data"] = temp
         return context
-    
 
 
-    
 class MarksheetView(LoginRequiredMixin, ListView):
     """This shows the assignment submission report in percentage"""
 
@@ -122,7 +114,7 @@ class MarksheetView(LoginRequiredMixin, ListView):
     paginate_by = 100
 
     def get_queryset(self):
-        all_users = User.objects.filter(is_superuser=False)
+        all_users = get_user_model().objects.filter(is_superuser=False)
         return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
@@ -131,7 +123,6 @@ class MarksheetView(LoginRequiredMixin, ListView):
         temp = ProgressReport().get_trainee_marks(context["object_list"])
         context["overall_data"] = temp
         return context
-
 
 
 class AssignmentReportView(LoginRequiredMixin, ListView):
@@ -143,7 +134,7 @@ class AssignmentReportView(LoginRequiredMixin, ListView):
     paginate_by = 100
 
     def get_queryset(self):
-        all_users = User.objects.filter(is_superuser=False)
+        all_users = get_user_model().objects.filter(is_superuser=False)
         return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
@@ -154,18 +145,16 @@ class AssignmentReportView(LoginRequiredMixin, ListView):
         return context
 
 
-
 class OverallProgressView(LoginRequiredMixin, ListView):
     """This shows the overall progress of the student"""
 
     template_name = "progress_app/overall_progress.html"
     paginate_by = 100
     login_url = reverse_lazy("progress_app:login")
-    model = ProgressReport  
+    model = ProgressReport
 
     def get_queryset(self):
-
-        all_users = User.objects.filter(is_superuser=False)
+        all_users = get_user_model().objects.filter(is_superuser=False)
         return ProgressReport.objects.filter(user__in=all_users)
 
     def get_context_data(self, **kwargs):
@@ -173,5 +162,3 @@ class OverallProgressView(LoginRequiredMixin, ListView):
         temp = ProgressReport().get_trainee_overall_score(context["object_list"])
         context["overall_data"] = temp
         return context
-
-

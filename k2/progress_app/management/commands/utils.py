@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from progress_app.models import ProgressReport
 from django.db import IntegrityError
 
+
 class Command(BaseCommand):
     help = "generate random data for progress reports"
 
