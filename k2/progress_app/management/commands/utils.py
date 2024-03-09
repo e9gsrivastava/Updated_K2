@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from progress_app.models import ProgressReport
 from django.db import IntegrityError
 
-
 class Command(BaseCommand):
     help = "generate random data for progress reports"
 
@@ -14,6 +13,8 @@ class Command(BaseCommand):
     def generate_random_data(self):
         trainee_names = ["Akbar", "Shivansh", "Kunal", "Akash", "Gaurav"]
         total_trainees = 10000
+
+        progress_reports = []
 
         for i in range(total_trainees):
             name = random.choice(trainee_names)
@@ -38,7 +39,7 @@ class Command(BaseCommand):
                     marks = random.randint(50, 100)
                     comments = f"Week {week_number} good."
 
-                    ProgressReport.objects.create(
+                    progress_report = ProgressReport(
                         user=trainee_user,
                         week_number=week_number,
                         attendance=attendance,
@@ -47,7 +48,11 @@ class Command(BaseCommand):
                         comments=comments,
                     )
 
+                    progress_reports.append(progress_report)
+
             except IntegrityError as e:
                 self.stdout.write(self.style.ERROR(f"IntegrityError: {e}"))
+
+        ProgressReport.objects.bulk_create(progress_reports)
 
         self.stdout.write(self.style.SUCCESS("Successful."))
