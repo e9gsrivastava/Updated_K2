@@ -18,4 +18,5 @@ class ProgressReportAdmin(admin.ModelAdmin):
         "assignment",
         "marks",
         "comments",
+        "slug",
     )

@@ -3,6 +3,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models import Avg
+from django.utils.text import slugify
 
 
 class ProgressReport(models.Model):
@@ -14,6 +15,7 @@ class ProgressReport(models.Model):
     assignment = models.PositiveIntegerField()
     marks = models.PositiveIntegerField()
     comments = models.TextField()
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
 
     def get_trainee_attendance(self, progress_reports):
         """To get the trainee's assignment data"""

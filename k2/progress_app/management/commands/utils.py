@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from progress_app.models import ProgressReport
 from django.db import IntegrityError
+from django.utils.text import slugify
 
 
 class Command(BaseCommand):
@@ -23,10 +24,6 @@ class Command(BaseCommand):
             base_username = f"e9{name.lower()}"
             username = base_username + str(i)
 
-            while User.objects.filter(username=username).exists():
-                i += 1
-                username = base_username + str(i)
-
             try:
                 trainee_user, _ = User.objects.get_or_create(
                     username=username,
@@ -40,6 +37,11 @@ class Command(BaseCommand):
                     marks = random.randint(50, 100)
                     comments = f"Week {week_number} good."
 
+                    base_slug = slugify(
+                        f"{trainee_user.username}-{week_number}-{random.randint(1000,9823)}"
+                    )
+                    unique_slug = base_slug
+
                     progress_report = ProgressReport(
                         user=trainee_user,
                         week_number=week_number,
@@ -47,6 +49,7 @@ class Command(BaseCommand):
                         assignment=assignment,
                         marks=marks,
                         comments=comments,
+                        slug=unique_slug,
                     )
 
                     progress_reports.append(progress_report)
