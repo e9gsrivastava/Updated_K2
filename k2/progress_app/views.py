@@ -5,10 +5,11 @@ from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, DetailView,ListView
+from django.views.generic import UpdateView, DetailView, ListView
 from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from progress_app.models import ProgressReport
@@ -24,10 +25,12 @@ class CustomLoginView(LoginView):
         login(self.request, user)
         return redirect(reverse_lazy("progress_app:overall_progress"))
 
+
 class CustomLogoutView(LogoutView):
     """this is to logout"""
 
     next_page = reverse_lazy("progress_app:login")
+
 
 class UpdateProgressReportView(UpdateView):
     """this is to update the Students marks and comments"""
@@ -47,6 +50,7 @@ class UpdateProgressReportView(UpdateView):
             "progress_app:student_detail",
             kwargs={"username": self.object.user.username},
         )
+
 
 class StudentDetailView(LoginRequiredMixin, DetailView):
     """this shows the detailed view of a single student's progress
@@ -84,6 +88,7 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
 
         context["progress_reports"] = progress_reports_page
         return context
+
 
 class AttendanceReportView(LoginRequiredMixin, ListView):
     """This shows the assignment submission report in percentage"""
