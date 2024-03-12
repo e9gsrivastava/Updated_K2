@@ -17,6 +17,23 @@ class ProgressReport(models.Model):
     comments = models.TextField()
     slug = models.SlugField(unique=True, max_length=255, blank=True)
 
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug =  f"{self.user.username}--agk"
+            unique_slug = base_slug
+            counter = 1
+
+            while ProgressReport.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}-agk"
+                counter += 1
+
+            self.slug = unique_slug
+
+        super().save(*args, **kwargs)
+
+
     def get_trainee_attendance(self, progress_reports):
         """To get the trainee's assignment data"""
         all_users = [

@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-class UserList(generics.ListCreateAPIView):
+class UserList(generics.ListAPIView):
     """
     API view for listing and creating Book objects.
     """
@@ -20,7 +20,7 @@ class UserList(generics.ListCreateAPIView):
     serializer_class = USerSerializer
 
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserDetail(generics.RetrieveAPIView):
     """
     API view for retrieving, updating, and deleting a Book object.
     """
@@ -57,7 +57,7 @@ class MyPagination(LimitOffsetPagination):
     max_limit = 10
 
 
-class OverallProgressAPIView(generics.ListCreateAPIView):
+class OverallProgressAPIView(generics.ListAPIView):
     """
     API view for listing and creating a Overall Progress object.
     """
@@ -78,25 +78,23 @@ class OverallProgressAPIView(generics.ListCreateAPIView):
         queryset = self.get_queryset()
         page = self.paginate_queryset(queryset)
 
-        if page is not None:
-            overall_data = ProgressReport.get_trainee_overall_score(page)
-            serialized_data = []
+        overall_data = ProgressReport.get_trainee_overall_score(page)
+        serialized_data = []
 
-            for username, overall_percentage in overall_data.items():
-                serialized_data.append(
-                    {
-                        "username": username,
-                        "overall_percentage": overall_percentage * 100,
-                    }
-                )
+        for username, overall_percentage in overall_data.items():
+            serialized_data.append(
+                {
+                    "username": username,
+                    "overall_percentage": overall_percentage * 100,
+                }
+            )
 
-            serializer = self.get_serializer(data=serialized_data, many=True)
-            serializer.is_valid()
+        serializer = self.get_serializer(data=serialized_data, many=True)
+        serializer.is_valid()
 
-            return self.get_paginated_response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
-
-class OverallProgressDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class OverallProgressDetailAPIView(generics.RetrieveAPIView):
     """
     API view to retrieve and retrieve Overall Progress object.
     """
@@ -129,16 +127,5 @@ class OverallProgressDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             serializer.is_valid()
 
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"detail": "User not found in overall data"})
-
-    def retrieve(self, request, *args, **kwargs):
-        """
-        to destroy Overall Progress
-        """
-        instance = self.get_object()
-        instance.delete()
-
-        return Response(
-            {"detail": "Successfully deleted."}, status=status.HTTP_204_NO_CONTENT
-        )
+        
+        return Response({"detail": "User not found in overall data"})

@@ -12,6 +12,7 @@ class ProgressReportAdmin(admin.ModelAdmin):
     """
 
     list_display = (
+        'id',
         "user",
         "week_number",
         "attendance",

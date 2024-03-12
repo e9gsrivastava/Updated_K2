@@ -10,10 +10,9 @@ class USerSerializer(serializers.ModelSerializer):
     """
     serializing data for User model
     """
-
     class Meta:
         model = User
-        fields = ["id", "username", "email", "date_joined"]
+        fields = [ "username", "email"]
 
 
 class ProgressReportSerializer(serializers.ModelSerializer):
@@ -23,13 +22,12 @@ class ProgressReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProgressReport
-        fields = "__all__"
+        fields = ['user','week_number','attendance','assignment','marks','comments','slug']
         read_only_fields = ["slug"]
 
 
 class OverallProgressSerializer(serializers.Serializer):
 
-    
     username = serializers.CharField()
     overall_percentage = serializers.FloatField()
 
